@@ -1,9 +1,9 @@
 /**
  * Aske chat widget for Drone Fotos.
- * Indlejrer Aske i en flydende panel via iframe.
+ * Indlejrer Aske i et flydende panel via iframe.
  *
  * Sæt URL med:
- *   <script src="aske-widget.js" data-aske-url="http://localhost:3000"></script>
+ *   <script src="aske-widget.js" data-aske-url="https://din-persolige-ai.ai.studio"></script>
  * eller window.ASKE_URL før scriptet.
  */
 (function () {
@@ -42,18 +42,15 @@
             <span>Din AI-planlægger</span>
           </div>
         </div>
-        <div class="aske-panel-actions">
-          <a class="aske-open-tab" href="${askeUrl}" target="_blank" rel="noopener noreferrer">Åbn i fane</a>
-          <button type="button" class="aske-close" aria-label="Luk Aske">×</button>
-        </div>
+        <button type="button" class="aske-close" aria-label="Luk Aske">×</button>
       </div>
       <div class="aske-panel-body">
-        <div class="aske-status" role="status">Forbinder til Aske…</div>
+        <div class="aske-status" role="status">Indlæser Aske…</div>
         <iframe
           class="aske-frame"
           title="Aske chat"
-          loading="lazy"
-          allow="microphone; clipboard-read; clipboard-write"
+          allow="microphone; clipboard-read; clipboard-write; fullscreen"
+          referrerpolicy="no-referrer-when-downgrade"
         ></iframe>
       </div>
     </div>
@@ -67,6 +64,7 @@
   const frame = root.querySelector(".aske-frame");
   const status = root.querySelector(".aske-status");
   let loaded = false;
+  let loadTimer = null;
 
   function setOpen(open) {
     panel.hidden = !open;
@@ -77,66 +75,37 @@
     }
   }
 
-  async function loadAske() {
-    loaded = true;
+  function showStatus(message, isError) {
     status.hidden = false;
-    status.textContent = "Forbinder til Aske…";
-    status.classList.remove("is-error");
-
-    const healthy = await pingAske();
-    if (!healthy) {
-      status.classList.add("is-error");
-      status.innerHTML = `
-        <p><strong>Aske er ikke tilgængelig lige nu.</strong></p>
-        <p>Prøv at åbne Aske i en ny fane, eller tjek at adressen stadig er aktiv.</p>
-        <p><a href="${askeUrl}" target="_blank" rel="noopener noreferrer">Åbn Aske direkte</a></p>
-      `;
-      frame.hidden = true;
-      return;
+    status.classList.toggle("is-error", Boolean(isError));
+    if (isError) {
+      status.innerHTML = message;
+    } else {
+      status.textContent = message;
     }
-
-    frame.hidden = false;
-    frame.src = askeUrl;
-    status.textContent = "Indlæser Aske…";
-
-    frame.addEventListener(
-      "load",
-      () => {
-        status.hidden = true;
-      },
-      { once: true }
-    );
   }
 
-  async function pingAske() {
-    // localhost / private hosts can only work when visitor is on same machine
-    try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 2500);
-      const res = await fetch(askeUrl, {
-        method: "HEAD",
-        mode: "no-cors",
-        signal: controller.signal,
-      });
-      clearTimeout(timer);
-      // no-cors gives opaque response; treat as reachable if no network error
-      return true;
-    } catch {
-      // HEAD may fail; try GET no-cors as fallback
-      try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 2500);
-        await fetch(askeUrl, {
-          method: "GET",
-          mode: "no-cors",
-          signal: controller.signal,
-        });
-        clearTimeout(timer);
-        return true;
-      } catch {
-        return false;
-      }
-    }
+  function hideStatus() {
+    status.hidden = true;
+  }
+
+  function loadAske() {
+    loaded = true;
+    showStatus("Indlæser Aske…", false);
+    frame.hidden = false;
+    frame.src = askeUrl + "/";
+
+    const onLoad = () => {
+      clearTimeout(loadTimer);
+      hideStatus();
+    };
+
+    frame.addEventListener("load", onLoad, { once: true });
+
+    // Hvis indlæsning trækker ud, behold iframe men skjul spinneren
+    loadTimer = setTimeout(() => {
+      hideStatus();
+    }, 8000);
   }
 
   launcher.addEventListener("click", () => {

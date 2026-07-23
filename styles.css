@@ -607,8 +607,8 @@ a {
   position: absolute;
   right: 0;
   bottom: calc(100% + 0.75rem);
-  width: min(420px, calc(100vw - 2rem));
-  height: min(640px, calc(100svh - 6.5rem));
+  width: min(440px, calc(100vw - 2rem));
+  height: min(720px, calc(100svh - 6rem));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -706,6 +706,10 @@ a {
   color: var(--text-muted);
   font-size: 0.92rem;
   background: #0b0b0b;
+}
+
+.aske-status[hidden] {
+  display: none !important;
 }
 
 .aske-status.is-error {
