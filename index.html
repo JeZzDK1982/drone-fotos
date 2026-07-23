@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Drone Fotos</title>
+    <meta
+      name="description"
+      content="Luftfotos fra drone — landskaber, kyst og by set ovenfra."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="#top">Drone Fotos</a>
+      <nav class="nav" aria-label="Hovedmenu">
+        <a href="#om">Om</a>
+        <a href="#galleri">Galleri</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-label="Forside">
+        <div class="hero-media" aria-hidden="true">
+          <img
+            src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=2400&q=80"
+            alt=""
+            width="2400"
+            height="1600"
+          />
+        </div>
+        <div class="hero-content">
+          <p class="brand">Drone Fotos</p>
+          <h1>Landskabet set fra oven</h1>
+          <p class="lede">
+            Hobbyprojekt med drone — luftfotos af kyst, marker og by i det danske lys.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#galleri">Se galleriet</a>
+            <a class="btn btn-ghost" href="#om">Om projektet</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section about" id="om">
+        <div class="section-inner">
+          <h2>Om hobbyen</h2>
+          <p>
+            Drone Fotos er et personligt hobbyprojekt. Jeg flyer for at fange
+            perspektiver, man ikke får fra jorden — linjer i landskabet, morgenlys
+            over vandet og byens rytme set ovenfra.
+          </p>
+        </div>
+      </section>
+
+      <section class="section gallery" id="galleri">
+        <div class="section-inner">
+          <h2>Galleri</h2>
+          <p class="section-lede">Udvalgte luftfotos. Klik for at se større.</p>
+
+          <ul class="gallery-grid">
+            <li>
+              <button
+                type="button"
+                class="gallery-item"
+                data-full="https://images.unsplash.com/photo-1508614999368-9260054292ea?auto=format&fit=crop&w=2000&q=80"
+                data-caption="Kystlinje i lav sol"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1508614999368-9260054292ea?auto=format&fit=crop&w=900&q=80"
+                  alt="Luftfoto af kystlinje i lav sol"
+                  loading="lazy"
+                  width="900"
+                  height="700"
+                />
+                <span class="gallery-caption">Kystlinje i lav sol</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="gallery-item"
+                data-full="https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=2000&q=80"
+                data-caption="Drone over åbent landskab"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=900&q=80"
+                  alt="Drone i luften over åbent landskab"
+                  loading="lazy"
+                  width="900"
+                  height="700"
+                />
+                <span class="gallery-caption">Drone over åbent landskab</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="gallery-item"
+                data-full="https://images.unsplash.com/photo-1486611367599-9752d426c6ba?auto=format&fit=crop&w=2000&q=80"
+                data-caption="Markfelter i mønster"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1486611367599-9752d426c6ba?auto=format&fit=crop&w=900&q=80"
+                  alt="Luftfoto af markfelter i geometriske mønstre"
+                  loading="lazy"
+                  width="900"
+                  height="700"
+                />
+                <span class="gallery-caption">Markfelter i mønster</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="gallery-item"
+                data-full="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2000&q=80"
+                data-caption="Bakker i morgenlys"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80"
+                  alt="Luftfoto af bakker i morgenlys"
+                  loading="lazy"
+                  width="900"
+                  height="700"
+                />
+                <span class="gallery-caption">Bakker i morgenlys</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="gallery-item"
+                data-full="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2000&q=80"
+                data-caption="Bjergtoppe og skyer"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=900&q=80"
+                  alt="Luftfoto af bjergtoppe og skyer"
+                  loading="lazy"
+                  width="900"
+                  height="700"
+                />
+                <span class="gallery-caption">Bjergtoppe og skyer</span>
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                class="gallery-item"
+                data-full="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=2000&q=80"
+                data-caption="Vand og reflektion"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=900&q=80"
+                  alt="Luftfoto af vand med reflektioner"
+                  loading="lazy"
+                  width="900"
+                  height="700"
+                />
+                <span class="gallery-caption">Vand og reflektion</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section contact" id="kontakt">
+        <div class="section-inner">
+          <h2>Kontakt</h2>
+          <p>
+            Har du spørgsmål til hobbyen eller vil du snakke drone-fotos?
+            Skriv endelig.
+          </p>
+          <a class="btn btn-primary" href="mailto:hej@dronefotos.dk"
+            >hej@dronefotos.dk</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© <span id="year"></span> Drone Fotos — hobbyprojekt</p>
+    </footer>
+
+    <dialog class="lightbox" id="lightbox" aria-label="Stort billede">
+      <button type="button" class="lightbox-close" aria-label="Luk">×</button>
+      <img src="" alt="" />
+      <p class="lightbox-caption"></p>
+    </dialog>
+
+    <script src="script.js"></script>
+  </body>
+</html>
