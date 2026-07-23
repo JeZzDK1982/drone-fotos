@@ -350,6 +350,116 @@ a {
   }
 }
 
+.scripts {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(241, 138, 74, 0.08), transparent 40%),
+    radial-gradient(ellipse at 90% 30%, rgba(166, 77, 182, 0.1), transparent 45%);
+}
+
+.script-list {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.script-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+.script-card-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 1rem;
+}
+
+.script-card h3 {
+  margin: 0 0 0.45rem;
+  font-size: 1.15rem;
+}
+
+.script-card-top p {
+  margin: 0;
+  max-width: 48ch;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.script-card-top code {
+  color: var(--orange);
+  font-size: 0.9em;
+}
+
+.section-lede code {
+  color: var(--orange);
+  font-size: 0.9em;
+}
+
+.runner-status {
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.runner-status.is-error {
+  border-color: rgba(241, 138, 74, 0.45);
+  color: #ffd2b0;
+}
+
+.script-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.script-actions .btn {
+  cursor: pointer;
+  font: inherit;
+}
+
+.script-actions .btn:disabled {
+  opacity: 0.65;
+  cursor: wait;
+  transform: none;
+}
+
+.btn-ghost-dark {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--text);
+}
+
+.btn-ghost-dark:hover,
+.btn-ghost-dark:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.script-code {
+  margin: 0;
+  padding: 1rem 1.25rem 1.25rem;
+  overflow-x: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: #050505;
+  color: #d7dde3;
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.script-code code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  white-space: pre;
+}
+
 .contact {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   text-align: center;

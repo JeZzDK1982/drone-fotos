@@ -44,6 +44,95 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+document.querySelectorAll(".copy-script").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const targetId = button.getAttribute("data-target");
+    const codeEl = targetId ? document.getElementById(targetId) : null;
+    const text = codeEl?.textContent?.trim();
+    if (!text) return;
+
+    const original = button.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      button.textContent = "Kopieret!";
+    } catch {
+      button.textContent = "Kunne ikke kopiere";
+    }
+    window.setTimeout(() => {
+      button.textContent = original;
+    }, 1600);
+  });
+});
+
+const RUNNER_URL = "http://127.0.0.1:8787";
+const runnerStatus = document.getElementById("runner-status");
+
+function setRunnerStatus(message, isError = false) {
+  if (!runnerStatus) return;
+  runnerStatus.hidden = !message;
+  runnerStatus.textContent = message || "";
+  runnerStatus.classList.toggle("is-error", Boolean(isError));
+}
+
+async function checkRunner() {
+  try {
+    const res = await fetch(`${RUNNER_URL}/health`, { signal: AbortSignal.timeout(1500) });
+    if (!res.ok) throw new Error("not ok");
+    setRunnerStatus("Script-runner er klar — du kan trykke Kør.");
+    return true;
+  } catch {
+    setRunnerStatus(
+      "Script-runner kører ikke. Start den med: runner/start-runner.sh",
+      true
+    );
+    return false;
+  }
+}
+
+document.querySelectorAll(".run-script").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const scriptId = button.getAttribute("data-script");
+    if (!scriptId) return;
+
+    const original = button.textContent;
+    button.disabled = true;
+    button.textContent = "Kører…";
+
+    try {
+      const res = await fetch(`${RUNNER_URL}/run/${scriptId}`, {
+        method: "POST",
+        signal: AbortSignal.timeout(320000),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        throw new Error(data.message || `Fejl ${res.status}`);
+      }
+      button.textContent = "Kørt!";
+      setRunnerStatus(data.message || "Scriptet er kørt.");
+    } catch (err) {
+      button.textContent = "Fejl";
+      const offline = String(err?.message || "").includes("Failed to fetch") ||
+        err?.name === "TimeoutError" ||
+        err?.name === "AbortError";
+      setRunnerStatus(
+        offline
+          ? "Kunne ikke nå script-runner. Start den med: runner/start-runner.sh"
+          : String(err.message || err),
+        true
+      );
+    }
+
+    window.setTimeout(() => {
+      button.disabled = false;
+      button.textContent = original;
+    }, 1800);
+  });
+});
+
+if (document.getElementById("scripts")) {
+  checkRunner();
+}
+
 const aboutInner = document.querySelector(".about .section-inner");
 if (aboutInner && "IntersectionObserver" in window) {
   const observer = new IntersectionObserver(

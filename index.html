@@ -52,6 +52,7 @@
         <a href="#top">Forside</a>
         <a href="#om">Om</a>
         <a href="#galleri">Galleri</a>
+        <a href="#scripts">Scripts</a>
         <a class="nav-accent" href="#kontakt">Kontakt</a>
       </nav>
 
@@ -248,6 +249,177 @@
         </div>
       </section>
 
+      <section class="section scripts" id="scripts">
+        <div class="section-inner">
+          <h2>Apple Scripts</h2>
+          <p class="section-lede">
+            Tryk <strong>Kør</strong> for at starte scriptet på din Mac. Kræver at
+            script-runner kører lokalt (<code>runner/start-runner.sh</code>).
+          </p>
+          <p class="runner-status" id="runner-status" hidden></p>
+
+          <div class="script-list">
+            <article class="script-card">
+              <div class="script-card-top">
+                <div>
+                  <h3>NAS Backup</h3>
+                  <p>
+                    Synkroniserer Downloads til NAS én gang. (Folder Action-versionen
+                    kan stadig downloades nedenfor.)
+                  </p>
+                </div>
+                <div class="script-actions">
+                  <button
+                    type="button"
+                    class="btn btn-gradient run-script"
+                    data-script="nas-backup"
+                  >
+                    Kør
+                  </button>
+                  <button type="button" class="btn btn-ghost-dark copy-script" data-target="code-nas">
+                    Kopiér
+                  </button>
+                  <a
+                    class="btn btn-ghost-dark"
+                    href="scripts/nas-backup-overfoersler.applescript"
+                    download
+                    >Download</a
+                  >
+                </div>
+              </div>
+              <pre class="script-code" id="code-nas"><code>-- Folder Action: NAS Backup af Overførsler
+-- Tilføj scriptet til en mappe via Finder → Mappehandlingsopsætning
+-- Rediger nasVolume og disk-navn, så det matcher din NAS
+
+on adding folder items to this_folder after receiving these_items
+	set nasVolume to "/Volumes/home/Backups/backup_downloads_mac"
+	
+	tell application "System Events"
+		set nasExists to exists disk "Backup"
+	end tell
+	
+	if nasExists then
+		set macMappe to POSIX path of this_folder
+		-- -a: bevarer rettigheder/tidsstempler, -u: kopier kun nye/ændrede filer
+		do shell script "rsync -au " &amp; quoted form of macMappe &amp; " " &amp; quoted form of nasVolume
+	else
+		display notification "Backuppen fejlede: NAS-drevet 'Backup' er ikke monteret." with title "Smart Home Backup" sound name "Basso"
+	end if
+end adding folder items to</code></pre>
+            </article>
+
+            <article class="script-card">
+              <div class="script-card-top">
+                <div>
+                  <h3>Gem Chrome-link i Noter</h3>
+                  <p>
+                    Gemmer titel og URL fra den aktive Chrome-fane i noten «Gemte links».
+                  </p>
+                </div>
+                <div class="script-actions">
+                  <button
+                    type="button"
+                    class="btn btn-gradient run-script"
+                    data-script="gem-link"
+                  >
+                    Kør
+                  </button>
+                  <button type="button" class="btn btn-ghost-dark copy-script" data-target="code-gem">
+                    Kopiér
+                  </button>
+                  <a class="btn btn-ghost-dark" href="scripts/gem-link.applescript" download
+                    >Download</a
+                  >
+                </div>
+              </div>
+              <pre class="script-code" id="code-gem"><code>-- Gem aktiv Chrome-fane i Apple Noter
+-- Gem filen og kør den fra Script Editor, eller lav en app/genvej
+
+tell application "Google Chrome"
+	set theTab to active tab of front window
+	set pageTitle to title of theTab
+	set pageURL to URL of theTab
+end tell
+
+set noteText to "📅 " &amp; ((current date) as string) &amp; return &amp; ¬
+	"📰 " &amp; pageTitle &amp; return &amp; ¬
+	"🔗 " &amp; pageURL &amp; return &amp; return
+
+tell application "Notes"
+	activate
+	
+	set folderName to "Noter"
+	set noteName to "Gemte links"
+	
+	try
+		set targetFolder to folder folderName
+	on error
+		set targetFolder to make new folder with properties {name:folderName}
+	end try
+	
+	try
+		set targetNote to first note of targetFolder whose name is noteName
+		set body of targetNote to body of targetNote &amp; noteText
+	on error
+		make new note at targetFolder with properties {name:noteName, body:noteText}
+	end try
+end tell</code></pre>
+            </article>
+
+            <article class="script-card">
+              <div class="script-card-top">
+                <div>
+                  <h3>Copy Downloads to Backup</h3>
+                  <p>
+                    Kopierer Downloads til din Google Drive-backup. Kør bruger dit
+                    lokale script; download-versionen har en placeholder-sti.
+                  </p>
+                </div>
+                <div class="script-actions">
+                  <button
+                    type="button"
+                    class="btn btn-gradient run-script"
+                    data-script="copy-downloads"
+                  >
+                    Kør
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-ghost-dark copy-script"
+                    data-target="code-downloads"
+                  >
+                    Kopiér
+                  </button>
+                  <a
+                    class="btn btn-ghost-dark"
+                    href="scripts/copy-downloads-backup.applescript"
+                    download
+                    >Download</a
+                  >
+                </div>
+              </div>
+              <pre class="script-code" id="code-downloads"><code>-- Kopiér Downloads til Google Drive-backup
+-- Rediger destFolder, så den matcher din Mac
+
+on run
+	set sourceFolder to POSIX path of (path to downloads folder)
+	-- Ret stien herunder til din egen Google Drive-backupmappe:
+	set destFolder to (POSIX path of (path to home folder)) &amp; "Library/CloudStorage/GoogleDrive-DIN_EMAIL/Mit drev/Backups/Downloads_Mac_Backup"
+	
+	try
+		do shell script "mkdir -p " &amp; quoted form of destFolder
+		do shell script "rsync -au --exclude='.DS_Store' --exclude='.localized' --exclude='*.crdownload' --exclude='*.download' " &amp; quoted form of (sourceFolder) &amp; " " &amp; quoted form of destFolder
+		display notification "Downloads er kopieret til backup." with title "Copy Downloads to Backup"
+	on error errMsg number errNum
+		display notification errMsg with title "Copy Downloads to Backup" sound name "Basso"
+		error errMsg number errNum
+	end try
+end run</code></pre>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section class="section contact" id="kontakt">
         <div class="section-inner contact-inner">
           <h2>Kontakt</h2>
@@ -292,13 +464,14 @@
           <h3>Om</h3>
           <a href="#om">Hobbyen</a>
           <a href="#galleri">Galleri</a>
+          <a href="#scripts">Scripts</a>
         </div>
 
         <div>
           <h3>Sider</h3>
           <a href="#top">Forside</a>
+          <a href="#scripts">Apple Scripts</a>
           <a href="#kontakt">Kontakt</a>
-          <a href="#galleri">Billeder</a>
         </div>
 
         <div>
